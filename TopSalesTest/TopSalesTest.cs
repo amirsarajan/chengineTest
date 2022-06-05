@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Threading.Tasks;
 using TopSales.Core;
 using TopSales.Domain;
 using Xunit;
@@ -46,18 +47,19 @@ public class TopSalesTest
     }
 
     [Fact]
-    public void Returns_Empty_When_No_Order_Found()
+    public async Task Returns_Empty_When_No_Order_Found()
     {
         var orders = new List<Order>();
-        mockedOrderService.Setup(orderService => orderService.GetOrders()).Returns(orders);
+        mockedOrderService.Setup(orderService => orderService.GetOrders())
+            .Returns(Task.FromResult<IList<Order>>(orders.ToList()));
 
-        var sales = salesService.GetTopSales();
+        var sales = await salesService.GetTopSales();
 
         Assert.Empty(sales);
     }
 
     [Fact]
-    public void Returns_the_only_top_sales_of_one_product()
+    public async Task Returns_the_only_top_sales_of_one_product()
     {
         var orderLine = CreateTestOrderLine(0, 10, products, GTINs);
         var orderLine2 = CreateTestOrderLine(0, 15, products, GTINs);
@@ -72,9 +74,10 @@ public class TopSalesTest
                 Lines = new List<OrderLine>(){ orderLine2 }
             }
         };
-        mockedOrderService.Setup(orderService => orderService.GetOrders()).Returns(orders);
+        mockedOrderService.Setup(orderService => orderService.GetOrders())
+            .Returns(Task.FromResult<IList<Order>>(orders.ToList()));
 
-        var topsales = salesService.GetTopSales();
+        var topsales = await salesService.GetTopSales();
 
         Assert.Collection(topsales,
             theOnlySale =>
@@ -85,7 +88,7 @@ public class TopSalesTest
     }
 
     [Fact]
-    public void Returns_topsales_of_multiple_products()
+    public async Task Returns_topsales_of_multiple_products()
     {
         var testTuple = CreateTestProducts(10);
 
@@ -93,12 +96,15 @@ public class TopSalesTest
         var testGtins = testTuple.Item2;
 
         var orders = CreateTestOrders(10, testProducts, testGtins);
-        mockedOrderService.Setup(orderService => orderService.GetOrders()).Returns(orders);
+        mockedOrderService.Setup(orderService => orderService.GetOrders())
+            .Returns(Task.FromResult<IList<Order>>(orders.ToList()));
 
         mockedProductsService.Setup(productService => productService.GetProductName(It.IsAny<string>()))
-            .Returns<string>(merchantProductNo => testProducts.SingleOrDefault(p => p.MerchantProductNo == merchantProductNo)?.Name);
+            .Returns<string>(
+            merchantProductNo => testProducts.SingleOrDefault(p => p.MerchantProductNo == merchantProductNo)?.Name
+            );
 
-        var topsales = salesService.GetTopSales();
+        var topsales = await salesService.GetTopSales();
 
         var expectedSale = Enumerable.Range(1, 10)
             .Reverse()

@@ -16,10 +16,10 @@ namespace TopSales.Core
             this.productsService = productsService;
         }
 
-        public IList<Sale> GetTopSales(int top = 5)
+        public async Task<IList<Sale>> GetTopSales(int top = 5)
         {
-            var orders = ordersService.GetOrders();
-            var orderLines = orders.SelectMany(order => order.Lines);
+            var orders = await ordersService.GetOrders();
+            var orderLines =  orders.SelectMany(order => order.Lines);
 
             return orderLines
                 .GroupBy(orderline => new { orderline.GTIN, orderline.MerchantProductNo })

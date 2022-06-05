@@ -4,6 +4,6 @@ namespace TopSales.Core
 {
     public interface ISalesService
     {
-        IList<Sale> GetTopSales(int top = 5);
+        Task<IList<Sale>> GetTopSales(int top = 5);
     }
 }

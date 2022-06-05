@@ -25,5 +25,23 @@ namespace Topsales.Infrastructure
             throw new InfrastructureException(
                $"Failed to extract orders result url:{url} and content:{content}...");
         }
+
+        internal static Exception FaildToGetProducts(string url, string content)
+        {
+            throw new InfrastructureException(
+               $"Faild to get product list. url:{url} and content:{content}...");
+        }
+
+        internal static Exception FailedToExtractProducts(string url, string content)
+        {
+            throw new InfrastructureException(
+                $"Failed to extract products result. url:{url} and content:{content}...");
+        }
+
+        internal static Exception FaildToGetProducts(string message, string url, string content)
+        {
+            throw new InfrastructureException(
+               $"Message: {message} url:{url} and content:{content}...");
+        }
     }
 }

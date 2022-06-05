@@ -46,18 +46,8 @@ public class TopSalesTest
     [Fact]
     public void Returns_the_only_top_sales_of_one_product()
     {
-        var orderLine = new OrderLine()
-        {
-            MerchantProductNo = products[0].MerchantProductNo,
-            GTIN = GTINs[0],
-            Quantity = 10
-        };
-        var orderLine2 = new OrderLine()
-        {
-            MerchantProductNo = products[0].MerchantProductNo,
-            GTIN = GTINs[0],
-            Quantity = 15
-        };
+        var orderLine = CreateOrderLine(0, 10);
+        var orderLine2 = CreateOrderLine(0, 15);
 
         var orders = new List<Order>() {
             new Order(){
@@ -83,24 +73,10 @@ public class TopSalesTest
     [Fact]
     public void Returns_topsales_of_multiple_products()
     {
-        var product1OrderLine = new OrderLine()
-        {
-            MerchantProductNo = products[0].MerchantProductNo,
-            GTIN = GTINs[0],
-            Quantity = 10
-        };
-        var product2OrderLine = new OrderLine()
-        {
-            MerchantProductNo = products[1].MerchantProductNo,
-            GTIN = GTINs[1],
-            Quantity = 15
-        };
-        var product3OrderLine = new OrderLine()
-        {
-            MerchantProductNo = products[2].MerchantProductNo,
-            GTIN = GTINs[2],
-            Quantity = 5,
-        };
+        var product1OrderLine = CreateOrderLine(0, 10);        
+        var product2OrderLine = CreateOrderLine(1, 15);
+        var product3OrderLine = CreateOrderLine(2, 5);
+
         var orders = new List<Order>() {
             new Order(){
                 Status = "IN_PROGRESS",
@@ -136,4 +112,15 @@ public class TopSalesTest
                 Assert.Equal(products[2].Name, thirdTopSales.ProductName);
             });
     }
+
+    private OrderLine CreateOrderLine(int productIndex, int quantity)
+    {
+        return new OrderLine()
+        {
+            MerchantProductNo = products[productIndex].MerchantProductNo,
+            GTIN = GTINs[productIndex],
+            Quantity = quantity,
+        };
+    }
+    
 }

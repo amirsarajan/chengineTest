@@ -82,7 +82,7 @@ public class TopSalesTest
 
         var orders = CreateTestOrders(10, testProducts, testGtins);
 
-        var topsales = salesService.GetTopSales(orders, testProducts).Take(5);
+        var topsales = salesService.GetTopSales(orders, testProducts);
 
         var expectedSale = Enumerable.Range(1, 10)
             .Reverse()
@@ -91,7 +91,9 @@ public class TopSalesTest
                 ProductName = testProducts[index - 1].Name,
                 GTIN = testGtins[index - 1],
                 SoldQuantity = index * 10
-            }).ToList();
+            })
+            .Take(5)
+            .ToList();
 
         Assert.Equal(expectedSale, topsales, new TopSaleComparer());
     }

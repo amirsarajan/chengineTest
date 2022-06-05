@@ -10,9 +10,10 @@ namespace TopSalesTest
         {
         }
 
-        public IList<Sale> GetTopSales(
+        public IList<Sale> GetTopSales(            
             IList<Order> orders,
-            IList<Product> products)
+            IList<Product> products,
+            int top = 5)
         {
             var orderLines = orders.SelectMany(order => order.Lines);
 
@@ -26,6 +27,7 @@ namespace TopSalesTest
 
                 })
                 .OrderByDescending(sale => sale.SoldQuantity)
+                .Take(top)
                 .ToList();
         }
 

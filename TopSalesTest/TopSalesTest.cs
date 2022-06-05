@@ -10,7 +10,7 @@ public class TopSalesTest
     {
         var orders = new List<Order>();
         var salesService = new SalesService();
-        List<Sale> sales= salesService.GetTopSales();
+        List<Sale> sales= salesService.GetTopSales(orders);
 
         Assert.Empty(sales);
     }

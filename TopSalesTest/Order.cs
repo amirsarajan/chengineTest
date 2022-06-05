@@ -1,6 +1,6 @@
 ﻿namespace TopSalesTest
 {
-    internal class Order
+    public class Order
     {
     }
 }

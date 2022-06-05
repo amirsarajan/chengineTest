@@ -9,9 +9,9 @@ namespace TopSalesTest
         {
         }
 
-        public List<Sale> GetTopSales()
+        public List<Sale> GetTopSales(List<Order> orders)
         {
-            throw new NotImplementedException();
+            return new List<Sale>();
         }
     }
 }

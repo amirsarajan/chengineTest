@@ -7,6 +7,7 @@ namespace TopSalesTest;
 public class TopSalesTest
 {
     private readonly List<Product> products;
+    public string[] GTINs { get; }
     private readonly SalesService salesService;
 
     public TopSalesTest()
@@ -24,9 +25,7 @@ public class TopSalesTest
                 Name = " Product2",
             }
         };
-
-
-
+        GTINs = new string[] { "G#1111", "G#2222" };
         salesService = new SalesService();
     }
 
@@ -40,20 +39,21 @@ public class TopSalesTest
     }
 
     [Fact]
-    public void Returns_Only_top_sales_of_multi_order_of_one_product()
+    public void Returns_the_only_top_sales_of_one_product()
     {
         var orderLine = new OrderLine()
         {
             MerchantProductNo = products[0].MerchantProductNo,
-            GTIN = "G#1111",
+            GTIN = GTINs[0],
             Quantity = 10
         };
         var orderLine2 = new OrderLine()
         {
-            MerchantProductNo = products[1].MerchantProductNo,
-            GTIN = "G#1111",
+            MerchantProductNo = products[0].MerchantProductNo,
+            GTIN = GTINs[0],
             Quantity = 15
         };
+
         var orders = new List<Order>() {
             new Order(){
                 Status = "IN_PROGRESS",
@@ -81,19 +81,19 @@ public class TopSalesTest
         var orderLine = new OrderLine()
         {
             MerchantProductNo = products[0].MerchantProductNo,
-            GTIN = "G#1111",
+            GTIN = GTINs[0],
             Quantity = 10
         };
         var orderLine2 = new OrderLine()
         {
             MerchantProductNo = products[1].MerchantProductNo,
-            GTIN = "G#2222",
+            GTIN = GTINs[1],
             Quantity = 15
         };
         var orders = new List<Order>() {
             new Order(){
                 Status = "IN_PROGRESS",
-                Lines = new List<OrderLine>(){ 
+                Lines = new List<OrderLine>(){
                     orderLine ,
                     orderLine2
                 }
@@ -110,7 +110,7 @@ public class TopSalesTest
             },
             secondTopSale =>
             {
-                Assert.Equal(orderLine.Quantity , secondTopSale.SoldQuantity);
+                Assert.Equal(orderLine.Quantity, secondTopSale.SoldQuantity);
                 Assert.Equal(products[0].Name, secondTopSale.ProductName);
             });
     }

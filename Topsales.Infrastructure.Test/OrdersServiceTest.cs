@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Topsales.Infrastructure.Test
+namespace Topsales.Infrastructure.Integration.Test
 {
     public class OrdersServiceTest
     {

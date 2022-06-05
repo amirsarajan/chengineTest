@@ -19,20 +19,36 @@ namespace TopSales.Core
         public async Task<IList<Sale>> GetTopSales(int top = 5)
         {
             var orders = await ordersService.GetOrders();
-            var orderLines =  orders.SelectMany(order => order.Lines);
+            var orderLines = orders.SelectMany(order => order.Lines);
 
-            return orderLines
-                .GroupBy(orderline => new { orderline.GTIN, orderline.MerchantProductNo })
-                .Select(orderLineGroup => new Sale()
+            var topSales = orderLines.GroupBy(
+                orderline => new
                 {
-                    GTIN = orderLineGroup.Key.GTIN,
-                    SoldQuantity = orderLineGroup.Sum(orderLine => orderLine.Quantity),
-                    ProductName = productsService.GetProductName(orderLineGroup.Key.MerchantProductNo)
-                })
-                .OrderByDescending(sale => sale.SoldQuantity)
-                .Take(top)
-                .ToList();
+                    orderline.GTIN,
+                    orderline.MerchantProductNo
+                }).Select(
+                orderLineGroup => new
+                {
+                    orderLineGroup.Key.GTIN,
+                    orderLineGroup.Key.MerchantProductNo,
+                    SoldQuantity = orderLineGroup.Sum(orderLine => orderLine.Quantity)
+                }).OrderByDescending(
+                sale => sale.SoldQuantity
+                ).Take(top).ToList();
+
+            var topSoldMerchantProductNos = topSales.Select(topSold => topSold.MerchantProductNo);
+
+            var topSoldProducts = await productsService.GetProducts(topSoldMerchantProductNos);
+
+            return topSales.Join(topSoldProducts, 
+                topsale => topsale.MerchantProductNo, 
+                topProduct => topProduct.MerchantProductNo, 
+                (topSale, topProduct) => new Sale{
+                    GTIN = topSale.GTIN,
+                    ProductName = topProduct.Name,
+                    SoldQuantity = topSale.SoldQuantity
+                }).ToList();
         }
-       
+
     }
 }

@@ -41,9 +41,19 @@ public class TopSalesTest
         GTINs = new string[] { "G#1111", "G#2222", "G#3333" };
 
         mockedProductsService.Setup(productService => productService.GetProductName(It.IsAny<string>()))
-            .Returns<string>(merchantProductNo => products.SingleOrDefault(p => p.MerchantProductNo == merchantProductNo)?.Name);
+            .Returns<string>(
+            merchantProductNo => Task.FromResult(products.SingleOrDefault(p => p.MerchantProductNo == merchantProductNo)?.Name)
+            );
+        SetupMockeProductsService(products);
 
         salesService = new SalesService(mockedOrderService.Object, mockedProductsService.Object);
+    }
+
+    private void SetupMockeProductsService(IList<Product> products)
+    {
+        mockedProductsService.Setup(
+            productService => productService.GetProducts(It.IsAny<IEnumerable<string>>()))
+            .Returns<IEnumerable<string>>(merchantProductNos => Task.FromResult<IList<Product>>(products.Where(product => merchantProductNos.Contains(product.MerchantProductNo)).ToList()));
     }
 
     [Fact]
@@ -99,10 +109,7 @@ public class TopSalesTest
         mockedOrderService.Setup(orderService => orderService.GetOrders())
             .Returns(Task.FromResult<IList<Order>>(orders.ToList()));
 
-        mockedProductsService.Setup(productService => productService.GetProductName(It.IsAny<string>()))
-            .Returns<string>(
-            merchantProductNo => testProducts.SingleOrDefault(p => p.MerchantProductNo == merchantProductNo)?.Name
-            );
+        SetupMockeProductsService(testProducts);
 
         var topsales = await salesService.GetTopSales();
 

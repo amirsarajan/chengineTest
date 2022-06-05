@@ -7,13 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TopSalesTest", "TopSalesTes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TopSales.Core", "TopSalesCore\TopSales.Core.csproj", "{AE374D65-4AEE-4C17-AE4C-F47EFCCBC825}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TopSales.Domain", "TopSales.Domain\TopSales.Domain.csproj", "{EF0A51FA-CE59-433F-85C5-26C74FFD6B8F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TopSales.Domain", "TopSales.Domain\TopSales.Domain.csproj", "{EF0A51FA-CE59-433F-85C5-26C74FFD6B8F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Topsales.Infrastructure", "Topsales.Infrastructure\Topsales.Infrastructure.csproj", "{BD56BF58-1BE2-4CE7-BAEC-7CD5C176214F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Topsales.Infrastructure", "Topsales.Infrastructure\Topsales.Infrastructure.csproj", "{BD56BF58-1BE2-4CE7-BAEC-7CD5C176214F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TopSale.ConsoleApp", "TopSale.ConsoleApp\TopSale.ConsoleApp.csproj", "{8A10FD3D-0F0F-4D29-BBB0-07464BD87B1E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TopSale.ConsoleApp", "TopSale.ConsoleApp\TopSale.ConsoleApp.csproj", "{8A10FD3D-0F0F-4D29-BBB0-07464BD87B1E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Topsales.Infrastructure.Test", "Topsales.Infrastructure.Test\Topsales.Infrastructure.Test.csproj", "{21A21BA3-194A-4390-9652-3643DD982BE7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Topsales.Infrastructure.Integration.Test", "Topsales.Infrastructure.Test\Topsales.Infrastructure.Integration.Test.csproj", "{21A21BA3-194A-4390-9652-3643DD982BE7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

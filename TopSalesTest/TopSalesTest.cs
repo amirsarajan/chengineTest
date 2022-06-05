@@ -16,9 +16,7 @@ public class TopSalesTest
             MerchantProductNo = "#1111",
             Name = " Product1",
         };
-        products = new List<Product>() {
-            product1
-        };
+        
         salesService = new SalesService();
     }
 
@@ -26,7 +24,7 @@ public class TopSalesTest
     public void Returns_Empty_When_No_Order_Found()
     {
         var orders = new List<Order>();
-        var sales = salesService.GetTopSales(orders, products);
+        var sales = salesService.GetTopSales(orders, product1);
 
         Assert.Empty(sales);
     }
@@ -47,12 +45,48 @@ public class TopSalesTest
             }
         };
 
-        var topsales = salesService.GetTopSales(orders, products);
+        var topsales = salesService.GetTopSales(orders, product1);
 
         Assert.Collection(topsales,
             theOnlySale =>
             {
                 Assert.Equal(orderLine.Quantity, theOnlySale.SoldQuantity);
+                Assert.Equal(product1.Name, theOnlySale.ProductName);
+            });
+    }
+
+    [Fact]
+    public void Returns_Only_top_sales_of_multi_order_of_one_product()
+    {
+        var orderLine = new OrderLine()
+        {
+            MerchantProductNo = "#1111",
+            GTIN = "G#1111",
+            Quantity = 10
+        };
+        var orderLine2 = new OrderLine()
+        {
+            MerchantProductNo = "#1111",
+            GTIN = "G#1111",
+            Quantity = 15
+        };
+        var orders = new List<Order>() {
+            new Order(){
+                Status = "IN_PROGRESS",
+                Lines = new List<OrderLine>(){ orderLine }
+            },
+            new Order(){
+                Status = "IN_PROGRESS",
+                Lines = new List<OrderLine>(){ orderLine2 }
+            }
+        };
+
+        var topsales = salesService.GetTopSales(orders, product1);
+
+        Assert.Collection(topsales,
+            theOnlySale =>
+            {
+                Assert.Equal(orderLine.Quantity + orderLine2.Quantity, theOnlySale.SoldQuantity);
                 Assert.Equal(product1.Name, theOnlySale.ProductName);
             });
     }

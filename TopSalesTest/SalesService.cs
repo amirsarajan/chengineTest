@@ -12,20 +12,20 @@ namespace TopSalesTest
 
         public IList<Sale> GetTopSales(
             IList<Order> orders,
-            IList<Product> products)
+            Product product)
         {
-            var orderLine = orders.SelectMany(order => order.Lines).First();
+            var orderLines = orders.SelectMany(order => order.Lines);
 
-            var onlyProduct = products.First();
-
-            return new List<Sale>(){
-                new Sale()
+            return orderLines
+                .GroupBy(orderline => orderline.GTIN)
+                .Select(productOrderLines => new Sale()
                 {
-                    ProductName = onlyProduct.Name,
-                    SoldQuantity = orderLine.Quantity,
-                    GTIN = orderLine.GTIN,
-                }
-            };
+                    GTIN = productOrderLines.Key,
+                    SoldQuantity = productOrderLines.Sum(orderLine => orderLine.Quantity),
+                    ProductName = product.Name
+
+                }).ToList();
+            
         }
     }
 }

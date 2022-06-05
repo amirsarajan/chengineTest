@@ -1,7 +1,10 @@
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using TopSales.Core;
+using TopSales.Domain;
 using Xunit;
 
 namespace TopSalesTest;
@@ -11,6 +14,8 @@ public class TopSalesTest
     private readonly List<Product> products;
     public string[] GTINs { get; }
     private readonly SalesService salesService;
+    private readonly Mock<IOrdersService> mockedOrderService = new Mock<IOrdersService>();
+    private readonly Mock<IProductsService> mockedProductsService = new Mock<IProductsService>();
 
     public TopSalesTest()
     {
@@ -33,14 +38,20 @@ public class TopSalesTest
             }
         };
         GTINs = new string[] { "G#1111", "G#2222", "G#3333" };
-        salesService = new SalesService();
+
+        mockedProductsService.Setup(productService => productService.GetProductName(It.IsAny<string>()))
+            .Returns<string>(merchantProductNo => products.SingleOrDefault(p => p.MerchantProductNo == merchantProductNo)?.Name);
+
+        salesService = new SalesService(mockedOrderService.Object, mockedProductsService.Object);
     }
 
     [Fact]
     public void Returns_Empty_When_No_Order_Found()
     {
         var orders = new List<Order>();
-        var sales = salesService.GetTopSales(orders, products);
+        mockedOrderService.Setup(orderService => orderService.GetOrders()).Returns(orders);
+
+        var sales = salesService.GetTopSales();
 
         Assert.Empty(sales);
     }
@@ -61,8 +72,9 @@ public class TopSalesTest
                 Lines = new List<OrderLine>(){ orderLine2 }
             }
         };
+        mockedOrderService.Setup(orderService => orderService.GetOrders()).Returns(orders);
 
-        var topsales = salesService.GetTopSales(orders, products);
+        var topsales = salesService.GetTopSales();
 
         Assert.Collection(topsales,
             theOnlySale =>
@@ -81,8 +93,12 @@ public class TopSalesTest
         var testGtins = testTuple.Item2;
 
         var orders = CreateTestOrders(10, testProducts, testGtins);
+        mockedOrderService.Setup(orderService => orderService.GetOrders()).Returns(orders);
 
-        var topsales = salesService.GetTopSales(orders, testProducts);
+        mockedProductsService.Setup(productService => productService.GetProductName(It.IsAny<string>()))
+            .Returns<string>(merchantProductNo => testProducts.SingleOrDefault(p => p.MerchantProductNo == merchantProductNo)?.Name);
+
+        var topsales = salesService.GetTopSales();
 
         var expectedSale = Enumerable.Range(1, 10)
             .Reverse()
@@ -144,7 +160,7 @@ public class TopSalesTest
         for (var orderIndex = 0; orderIndex < noOrders; orderIndex++)
         {
             var orderLines = Enumerable.Range(0, products.Count())
-                .Select(productIndex =>                
+                .Select(productIndex =>
                     CreateTestOrderLine(productIndex, productIndex + 1, products, gtins)
                 ).ToList();
 

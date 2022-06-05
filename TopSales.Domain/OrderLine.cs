@@ -1,4 +1,4 @@
-﻿namespace TopSalesTest
+﻿namespace TopSales.Domain
 {
     public class OrderLine
     {

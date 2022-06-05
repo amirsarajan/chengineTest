@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TopSalesTest
+namespace TopSales.Domain
 {
     public class Order
     {

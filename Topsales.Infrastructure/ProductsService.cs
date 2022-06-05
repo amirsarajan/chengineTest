@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using System.Net.Http;
 using TopSales.Core;
+using TopSales.Domain;
 
 namespace Topsales.Infrastructure
 {
@@ -15,7 +16,7 @@ namespace Topsales.Infrastructure
             this.options = options;
         }
 
-        public async Task<string> GetProductName(string merchantProductNo)
+        public Task<IList<Product>> GetProducts(IEnumerable<string> topSoldMerchantProductNos)
         {
             throw new NotImplementedException();
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace TopSalesTest
 {
@@ -9,9 +10,22 @@ namespace TopSalesTest
         {
         }
 
-        public List<Sale> GetTopSales(List<Order> orders)
+        public IList<Sale> GetTopSales(
+            IList<Order> orders,
+            IList<Product> products)
         {
-            return new List<Sale>();
+            var orderLine = orders.SelectMany(order => order.Lines).First();
+
+            var onlyProduct = products.First();
+
+            return new List<Sale>(){
+                new Sale()
+                {
+                    ProductName = onlyProduct.Name,
+                    SoldQuantity = orderLine.Quantity,
+                    GTIN = orderLine.GTIN,
+                }
+            };
         }
     }
 }

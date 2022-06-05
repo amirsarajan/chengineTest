@@ -9,7 +9,7 @@ namespace TopSalesTest
     public class Sale
     {
         public string ProductName { get; set; }
-        public string Gtis { get; set; }
+        public string GTIN { get; set; }
         public int SoldQuantity { get; set; }
     }
 }

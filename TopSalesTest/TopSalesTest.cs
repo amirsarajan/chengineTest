@@ -17,15 +17,20 @@ public class TopSalesTest
             new Product()
             {
                 MerchantProductNo = "#1111",
-                Name = " Product1",
+                Name = "Product1",
             },
             new Product()
             {
                 MerchantProductNo = "#2222",
-                Name = " Product2",
+                Name = "Product2",
+            },
+            new Product()
+            {
+                MerchantProductNo = "#3333",
+                Name = " Product3",
             }
         };
-        GTINs = new string[] { "G#1111", "G#2222" };
+        GTINs = new string[] { "G#1111", "G#2222","G#3333" };
         salesService = new SalesService();
     }
 
@@ -78,24 +83,36 @@ public class TopSalesTest
     [Fact]
     public void Returns_topsales_of_multiple_products()
     {
-        var orderLine = new OrderLine()
+        var product1OrderLine = new OrderLine()
         {
             MerchantProductNo = products[0].MerchantProductNo,
             GTIN = GTINs[0],
             Quantity = 10
         };
-        var orderLine2 = new OrderLine()
+        var product2OrderLine = new OrderLine()
         {
             MerchantProductNo = products[1].MerchantProductNo,
             GTIN = GTINs[1],
             Quantity = 15
         };
+        var product3OrderLine = new OrderLine()
+        {
+            MerchantProductNo = products[2].MerchantProductNo,
+            GTIN = GTINs[2],
+            Quantity = 5,
+        };
         var orders = new List<Order>() {
             new Order(){
                 Status = "IN_PROGRESS",
                 Lines = new List<OrderLine>(){
-                    orderLine ,
-                    orderLine2
+                    product1OrderLine ,
+                    product2OrderLine
+                }
+            },
+            new Order(){
+                Status = "IN_PROGRESS",
+                Lines = new List<OrderLine>(){
+                    product3OrderLine
                 }
             }
         };
@@ -105,13 +122,18 @@ public class TopSalesTest
         Assert.Collection(topsales,
             firstTopSale =>
             {
-                Assert.Equal(orderLine2.Quantity, firstTopSale.SoldQuantity);
+                Assert.Equal(product2OrderLine.Quantity, firstTopSale.SoldQuantity);
                 Assert.Equal(products[1].Name, firstTopSale.ProductName);
             },
             secondTopSale =>
             {
-                Assert.Equal(orderLine.Quantity, secondTopSale.SoldQuantity);
+                Assert.Equal(product1OrderLine.Quantity, secondTopSale.SoldQuantity);
                 Assert.Equal(products[0].Name, secondTopSale.ProductName);
+            },
+            thirdTopSales =>
+            {
+                Assert.Equal(product3OrderLine.Quantity, thirdTopSales.SoldQuantity);
+                Assert.Equal(products[2].Name, thirdTopSales.ProductName);
             });
     }
 }

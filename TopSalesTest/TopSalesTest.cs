@@ -40,10 +40,6 @@ public class TopSalesTest
         };
         GTINs = new string[] { "G#1111", "G#2222", "G#3333" };
 
-        mockedProductsService.Setup(productService => productService.GetProductName(It.IsAny<string>()))
-            .Returns<string>(
-            merchantProductNo => Task.FromResult(products.SingleOrDefault(p => p.MerchantProductNo == merchantProductNo)?.Name)
-            );
         SetupMockeProductsService(products);
 
         salesService = new SalesService(mockedOrderService.Object, mockedProductsService.Object);

@@ -22,16 +22,16 @@ namespace Topsales.Infrastructure
         public async Task<IList<Order>> GetOrders()
         {
             var url = $"v2/orders?statuses=IN_PROGRESS&apikey={config.ApiKey}";
-            var response = await client.GetAsync(url);            
+            var response = await client.GetAsync(url);
             var content = await response.Content.ReadAsStringAsync();
-            if (!response.IsSuccessStatusCode)            
-                throw Erros.FaildToGetOrdersList(url, content);
-            
+            if (!response.IsSuccessStatusCode)
+                throw Erros.FaildToPerformAction(ResourceActions.GetOrders, url, content);
+
             var result = JsonSerializer.Deserialize<Response<Order[]>>(content);
-            if(result is null)
-                throw Erros.FailedToExtractOrdersResult(url,content);
+            if (result is null)
+                throw Erros.FailedToExtract(ResourceActions.GetOrders, url, content);
             if (!result.Success)
-                throw Erros.FaildToGetOrdersList(result.Message,url, content);
+                throw Erros.FaildToPerformAction(ResourceActions.GetOrders, result.Message, url, content);
             return result.Content;
         }
     }

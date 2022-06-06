@@ -43,5 +43,23 @@ namespace Topsales.Infrastructure
             throw new InfrastructureException(
                $"Message: {message} url:{url} and content:{content}...");
         }
+
+        internal static Exception FaildToPerformAction(string action ,string url, string content)
+        {
+            throw new InfrastructureException(
+               $"Action {action} failed url:{url} and content:{content}...");
+        }
+
+        internal static Exception FaildToPerformAction(string action, string message, string url, string content)
+        {
+            throw new InfrastructureException(
+               $"Action {action} failed. message={message} url={url} and content={content}...");
+        }
+
+        internal static Exception FailedToExtract(string resourceType,string url, string content)
+        {
+            throw new InfrastructureException(
+                $"Failed to extract {resourceType} result. url:{url} and content:{content}...");
+        }
     }
 }

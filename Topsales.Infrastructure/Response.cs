@@ -8,7 +8,7 @@ namespace Topsales.Infrastructure
 {
     public class Response<TResult>
     {
-        public TResult[] Content { get; set; }
+        public TResult Content { get; set; }
         public int Count { get; set; }
         public int TotalCount { get; set; }
         public int ItemsPerPage { get; set; }

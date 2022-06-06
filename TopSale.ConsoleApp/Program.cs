@@ -17,8 +17,8 @@ var topSales = (await saleService.GetTopSales()).ToList();
 Console.WriteLine("Top sold products");
 
 topSales.ForEach(sale => {
-    Console.WriteLine($"${sale.ProductName}({sale.GTIN}) sold {sale.SoldQuantity} items");
-}) ;
+    Console.WriteLine($"{sale.SoldQuantity,30} {sale.GTIN,30} {sale.ProductName}");
+});
 
 Console.WriteLine("Hello, World!");
 

@@ -27,7 +27,7 @@ namespace Topsales.Infrastructure
             if (!response.IsSuccessStatusCode)            
                 throw Erros.FaildToGetOrdersList(url, content);
             
-            var result = JsonSerializer.Deserialize<Response<Order>>(content);
+            var result = JsonSerializer.Deserialize<Response<Order[]>>(content);
             if(result is null)
                 throw Erros.FailedToExtractOrdersResult(url,content);
             if (!result.Success)

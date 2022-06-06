@@ -24,12 +24,12 @@ namespace TopSales.Core
             var topSales = orderLines.GroupBy(
                 orderline => new
                 {
-                    orderline.GTIN,
+                    orderline.Gtin,
                     orderline.MerchantProductNo
                 }).Select(
                 orderLineGroup => new
                 {
-                    orderLineGroup.Key.GTIN,
+                    orderLineGroup.Key.Gtin,
                     orderLineGroup.Key.MerchantProductNo,
                     SoldQuantity = orderLineGroup.Sum(orderLine => orderLine.Quantity)
                 }).OrderByDescending(
@@ -44,7 +44,8 @@ namespace TopSales.Core
                 topsale => topsale.MerchantProductNo, 
                 topProduct => topProduct.MerchantProductNo, 
                 (topSale, topProduct) => new Sale{
-                    GTIN = topSale.GTIN,
+                    MerchantProductNo = topProduct.MerchantProductNo,
+                    GTIN = topSale.Gtin,
                     ProductName = topProduct.Name,
                     SoldQuantity = topSale.SoldQuantity
                 }).ToList();

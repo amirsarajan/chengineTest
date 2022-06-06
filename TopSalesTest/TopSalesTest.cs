@@ -142,7 +142,7 @@ public class TopSalesTest
         return new OrderLine()
         {
             MerchantProductNo = products[productIndex].MerchantProductNo,
-            GTIN = gtins[productIndex],
+            Gtin = gtins[productIndex],
             Quantity = quantity,
         };
     }

@@ -1,0 +1,32 @@
+﻿@using TopSales.Domain
+@model IList<Sale>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Total sold</th>
+                <th>GTIN</th>
+                <th>Product Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                foreach (var sale in Model)
+                {
+                    <tr>
+                        <td>@(sale.SoldQuantity)</td>
+                        <td>@(sale.GTIN)</td>
+                        <td>@(sale.ProductName)</td>
+                        <td>@Html.ActionLink("Update Stock","Update", new {MerchantProductNo = sale.MerchantProductNo})</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

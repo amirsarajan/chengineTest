@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Text;
@@ -10,20 +11,20 @@ namespace Topsales.Infrastructure
     public class ProductsService : IProductsService
     {
         private HttpClient client;
-        private ChannelEngineConfig config;
+        private readonly string apiKey;
 
         public ProductsService(
             HttpClient client,
-            IOptions<ChannelEngineConfig> options)
+            IConfiguration configuration)
         {
             this.client = client;
-            this.config = options.Value;
+            apiKey = configuration.GetValue<string>("ApiKey");
         }
 
         public async Task<IList<Product>> GetProducts(IEnumerable<string> topSoldMerchantProductNos)
         {
             var merchantProductNos = string.Join("&", topSoldMerchantProductNos.Select(no => $"merchantProductNoList={no}"));
-            var url = $"v2/products?{merchantProductNos}&apikey={config.ApiKey}";
+            var url = $"v2/products?{merchantProductNos}&apikey={apiKey}";
 
             var response = await client.GetAsync(url);
 
@@ -45,7 +46,7 @@ namespace Topsales.Infrastructure
 
         public async Task UpdateStock(string merchantProductNo, int stock)
         {
-            var url = $"v2/products/{merchantProductNo}?apikey={config.ApiKey}";
+            var url = $"v2/products/{merchantProductNo}?apikey={apiKey}";
 
             var patchProduct = new JsonPatchDocument<Product>();
             patchProduct.Replace(p => p.Stock, stock);
@@ -67,7 +68,7 @@ namespace Topsales.Infrastructure
                 throw Errors.FailedToExtract(ResourceActions.PatchProductStock, url, content);
 
             if (!result.Success)
-                throw Errors.FaildToPerformAction(ResourceActions.PatchProductStock,result.Message, url, content);
+                throw Errors.FaildToPerformAction(ResourceActions.PatchProductStock, result.Message, url, content);
         }
     }
 }

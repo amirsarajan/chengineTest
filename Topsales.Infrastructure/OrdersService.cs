@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using System.Text.Json;
 using TopSales.Core;
 using TopSales.Domain;
@@ -8,20 +9,21 @@ namespace Topsales.Infrastructure
     public class OrdersService : IOrdersService
     {
         private readonly HttpClient client;
-        private readonly ChannelEngineConfig config;
+        private readonly string apiKey;
 
         public OrdersService(
             HttpClient client,
-            IOptions<ChannelEngineConfig> config
+            IConfiguration configuration
             )
         {
             this.client = client;
-            this.config = config.Value;
+            apiKey = configuration.GetValue<string>("ApiKey");
+
         }
 
         public async Task<IList<Order>> GetOrders()
         {
-            var url = $"v2/orders?statuses=IN_PROGRESS&apikey={config.ApiKey}";
+            var url = $"v2/orders?statuses=IN_PROGRESS&apikey={apiKey}";
             var response = await client.GetAsync(url);
             var content = await response.Content.ReadAsStringAsync();
             if (!response.IsSuccessStatusCode)

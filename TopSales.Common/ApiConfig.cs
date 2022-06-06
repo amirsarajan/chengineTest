@@ -7,7 +7,7 @@ namespace TopSales.Common
     {
         public static bool ShouldMockAPI(this IConfiguration config)
         {
-            return config.GetValue<bool>("MOCK_API");
+            return config.GetValue<bool>("MockApi");
         }
     }
 }

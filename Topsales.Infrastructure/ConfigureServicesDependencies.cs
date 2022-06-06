@@ -9,8 +9,7 @@ namespace Topsales.Infrastructure
     {
         public static void AddExternalServices(
             this IServiceCollection services,
-            IConfiguration configuration,
-            string baseAddress)
+            IConfiguration configuration)
         {
             if (configuration.ShouldMockAPI())
             {
@@ -19,11 +18,12 @@ namespace Topsales.Infrastructure
             }
             else
             {
-                services.AddHttpClient<IOrdersService, OrdersService>(config => config.BaseAddress = new Uri(baseAddress));
-                services.AddHttpClient<IProductsService, ProductsService>(config => config.BaseAddress = new Uri(baseAddress));
+                var baseUrl = configuration.GetValue<string>("BaseUrl");
+                services.AddHttpClient<IOrdersService, OrdersService>(config => config.BaseAddress = new Uri(baseUrl));
+                services.AddHttpClient<IProductsService, ProductsService>(config => config.BaseAddress = new Uri(baseUrl));
             }
 
-            
+
         }
     }
 }

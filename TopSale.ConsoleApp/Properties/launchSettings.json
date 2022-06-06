@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "TopSale.ConsoleApp": {
+      "commandName": "Project",
+      "commandLineArgs": "--MockApi=false"
+    }
+  }
+}

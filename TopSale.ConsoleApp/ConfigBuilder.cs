@@ -1,22 +1,19 @@
 ﻿using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TopSale.ConsoleApp
 {
     internal class ConfigBuilder
     {
-        public static IConfigurationRoot Build(bool mockApi = false)
+        public static IConfigurationRoot Build<TSecret>(string[] args) 
+            where TSecret : class
         {
             var configBuilder = new ConfigurationBuilder();
-            configBuilder.AddInMemoryCollection(
-                new List<KeyValuePair<string, string>>()
-                {
-                   new KeyValuePair<string, string>("MOCK_API",mockApi.ToString())
-                });
+
+            configBuilder.AddUserSecrets<TSecret>();
+            configBuilder.AddEnvironmentVariables();
+            if (args is not null)
+                configBuilder.AddCommandLine(args);
+
             var config = configBuilder.Build();
             return config;
         }

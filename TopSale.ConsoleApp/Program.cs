@@ -8,11 +8,10 @@ using TopSales.Core;
 
 var services = new ServiceCollection();
 
-services.Configure<ChannelEngineConfig>(config => config.ApiKey = "541b989ef78ccb1bad630ea5b85c6ebff9ca3322");
+var config = ConfigBuilder.Build<Program>(Environment.GetCommandLineArgs());
 
-IConfigurationRoot config = ConfigBuilder.Build(mockApi:true);
-
-services.AddExternalServices(config, "https://api-dev.channelengine.net/api/");
+services.AddSingleton<IConfiguration>(config);
+services.AddExternalServices(config);
 services.AddServices();
 
 var provider = services.BuildServiceProvider();

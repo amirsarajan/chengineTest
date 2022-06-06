@@ -30,15 +30,15 @@ namespace Topsales.Infrastructure
             var content = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
-                throw Erros.FaildToPerformAction(ResourceActions.GetProducts, url, content);
+                throw Errors.FaildToPerformAction(ResourceActions.GetProducts, url, content);
 
             var result = JsonConvert.DeserializeObject<Response<Product[]>>(content);
 
             if (result is null)
-                throw Erros.FailedToExtract(ResourceActions.GetProducts, url, content);
+                throw Errors.FailedToExtract(ResourceActions.GetProducts, url, content);
 
             if (!result.Success)
-                throw Erros.FaildToPerformAction(ResourceActions.GetProducts, result.Message, url, content);
+                throw Errors.FaildToPerformAction(ResourceActions.GetProducts, result.Message, url, content);
 
             return result.Content;
         }
@@ -59,15 +59,15 @@ namespace Topsales.Infrastructure
             var content = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
-                throw Erros.FaildToPerformAction(ResourceActions.PatchProductStock, url, content);
+                throw Errors.FaildToPerformAction(ResourceActions.PatchProductStock, url, content);
 
             var result = JsonConvert.DeserializeObject<Response<ProductPatchContent>>(content);
 
             if (result is null)
-                throw Erros.FailedToExtract(ResourceActions.PatchProductStock, url, content);
+                throw Errors.FailedToExtract(ResourceActions.PatchProductStock, url, content);
 
             if (!result.Success)
-                throw Erros.FaildToPerformAction(ResourceActions.PatchProductStock,result.Message, url, content);
+                throw Errors.FaildToPerformAction(ResourceActions.PatchProductStock,result.Message, url, content);
         }
     }
 }

@@ -25,13 +25,13 @@ namespace Topsales.Infrastructure
             var response = await client.GetAsync(url);
             var content = await response.Content.ReadAsStringAsync();
             if (!response.IsSuccessStatusCode)
-                throw Erros.FaildToPerformAction(ResourceActions.GetOrders, url, content);
+                throw Errors.FaildToPerformAction(ResourceActions.GetOrders, url, content);
 
             var result = JsonSerializer.Deserialize<Response<Order[]>>(content);
             if (result is null)
-                throw Erros.FailedToExtract(ResourceActions.GetOrders, url, content);
+                throw Errors.FailedToExtract(ResourceActions.GetOrders, url, content);
             if (!result.Success)
-                throw Erros.FaildToPerformAction(ResourceActions.GetOrders, result.Message, url, content);
+                throw Errors.FaildToPerformAction(ResourceActions.GetOrders, result.Message, url, content);
             return result.Content;
         }
     }

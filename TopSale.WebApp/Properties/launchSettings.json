@@ -23,7 +23,7 @@
       "launchBrowser": true,
       "applicationUrl": "https://localhost:7096;http://localhost:5086",
       "environmentVariables": {
-        "MOCK_API": true,
+        "MOCK_API": "true",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },

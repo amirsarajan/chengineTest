@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Topsales.Infrastructure
 {
-    public class Erros
+    public class Errors
     {      
         internal static Exception FaildToPerformAction(string action ,string url, string content)
         {
@@ -24,6 +24,11 @@ namespace Topsales.Infrastructure
         {
             throw new InfrastructureException(
                 $"Failed to extract {resourceType} result. url:{url} and content:{content}...");
+        }
+
+        internal static void NotFound(string getProducts)
+        {
+            throw new NotImplementedException();
         }
     }
 }

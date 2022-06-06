@@ -8,11 +8,13 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="6.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TopSales.Common\TopSales.Common.csproj" />
     <ProjectReference Include="..\TopSales.Domain\TopSales.Domain.csproj" />
     <ProjectReference Include="..\TopSalesCore\TopSales.Core.csproj" />
   </ItemGroup>

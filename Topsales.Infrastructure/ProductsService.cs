@@ -18,13 +18,14 @@ namespace Topsales.Infrastructure
             IConfiguration configuration)
         {
             this.client = client;
-            apiKey = configuration.GetValue<string>("ApiKey");
+            apiKey = configuration.GetApiKey();
         }
 
-        public async Task<IList<Product>> GetProducts(IEnumerable<string> topSoldMerchantProductNos)
+        public async Task<IList<Product>> GetProducts(IEnumerable<string> merchantProductNos)
         {
-            var merchantProductNos = string.Join("&", topSoldMerchantProductNos.Select(no => $"merchantProductNoList={no}"));
-            var url = $"v2/products?{merchantProductNos}&apikey={apiKey}";
+            var urlParameters = new List<string>() { $"apikey={apiKey}" };
+            urlParameters.AddRange(merchantProductNos.Select(no => $"merchantProductNoList={no}"));            
+            var url = $"v2/products?{string.Join("&",urlParameters)}";
 
             var response = await client.GetAsync(url);
 

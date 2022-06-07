@@ -9,7 +9,7 @@ namespace TopSale.WebApp
             this IServiceCollection services, IConfiguration config)
         {
             services.AddExternalServices(config);
-            services.AddServices();
+            services.AddCoreServices();
         }
     }
 }

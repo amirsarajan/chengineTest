@@ -17,8 +17,7 @@ namespace Topsales.Infrastructure
             )
         {
             this.client = client;
-            apiKey = configuration.GetValue<string>("ApiKey");
-
+            apiKey = configuration.GetApiKey();
         }
 
         public async Task<IList<Order>> GetOrders()

@@ -5,7 +5,7 @@ namespace TopSales.Core
 {
     public static class ConfigureServicesDependencies
     {
-        public static void AddServices(this IServiceCollection services)
+        public static void AddCoreServices(this IServiceCollection services)
         {
             services.AddTransient<ISalesService, SalesService>();
         }
